@@ -2,3 +2,5 @@ pandas
 neo4j
 graphdatascience
 dotenv
+openpyxl
+spacy

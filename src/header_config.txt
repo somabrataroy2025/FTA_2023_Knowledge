@@ -1,0 +1,42 @@
+{"label":"Q1", "pattern":[{"lower":"january"}]}
+{"label":"Q1", "pattern":[{"lower":"jan"}]}
+{"label":"Q1", "pattern":[{"lower":"march"}]}
+{"label":"Q1", "pattern":[{"lower":"mar"}]}
+{"label":"Q2", "pattern":[{"lower":"april"}]}
+{"label":"Q2", "pattern":[{"lower":"apr"}]}
+{"label":"Q2", "pattern":[{"lower":"jun"}]}
+{"label":"Q2", "pattern":[{"lower":"june"}]}
+{"label":"Q3", "pattern":[{"lower":"jul"}]}
+{"label":"Q3", "pattern":[{"lower":"july"}]}
+{"label":"Q3", "pattern":[{"lower":"sep"}]}
+{"label":"Q3", "pattern":[{"lower":"september"}]}
+{"label":"Q4", "pattern":[{"lower":"october"}]}
+{"label":"Q4", "pattern":[{"lower":"oct"}]}
+{"label":"Q4", "pattern":[{"lower":"december"}]}
+{"label":"Q4", "pattern":[{"lower":"dec"}]}
+{"label":"Bangalore", "pattern":[{"lower":"bangalore"}]}
+{"label":"Chennai", "pattern":[{"lower":"chennai"}]}
+{"label":"Cochin", "pattern":[{"lower":"cochin"}]}
+{"label":"Delhi", "pattern":[{"lower":"delhi"}]}
+{"label":"Haridaspur", "pattern":[{"lower":"haridaspur"}]}
+{"label":"Hyderabad", "pattern":[{"lower":"hyderabad"}]}
+{"label":"Kolkata", "pattern":[{"lower":"kolkata"}]}
+{"label":"Mumbai", "pattern":[{"lower":"mumbai"}]}
+{"label":"Other", "pattern":[{"lower":"other"}]}
+{"label":"Male", "pattern":[{"lower":"male"}]}
+{"label":"Female", "pattern":[{"lower":"female"}]}
+{"label":"Third Gender", "pattern":[{"lower":"third"}]}
+{"label":"0-14", "pattern":[{"text":"0"}]}
+{"label":"0-14", "pattern":[{"text":"14"}]}
+{"label":"15-24", "pattern":[{"text":"15"}]}
+{"label":"15-24", "pattern":[{"text":"24"}]}
+{"label":"25-34", "pattern":[{"text":"25"}]}
+{"label":"25-34", "pattern":[{"text":"34"}]}
+{"label":"35-44", "pattern":[{"text":"35"}]}
+{"label":"35-44", "pattern":[{"text":"44"}]}
+{"label":"45-54", "pattern":[{"text":"45"}]}
+{"label":"45-54", "pattern":[{"text":"54"}]}
+{"label":"55-64", "pattern":[{"text":"55"}]}
+{"label":"55-64", "pattern":[{"text":"64"}]}
+{"label":"65 and Above", "pattern":[{"text":"65"}]}
+{"label":"65 and Above", "pattern":[{"text":"above"}]}
