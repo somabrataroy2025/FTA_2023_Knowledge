@@ -157,4 +157,5 @@ class HeaderMatcher():
         return header_val
 
     if __name__ == "__main__":
-        pass
+        neoobj = NeoDB().neoDriver()
+        print(neoobj)

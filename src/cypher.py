@@ -74,6 +74,7 @@ class Cypher():
             record,summary,keys = driver.execute_query(
                 QRY_Quarter, 
                 database_= neo.DB_Name,
+                routing_= RoutingControl.WRITE
             )
             print(record)
             print(summary)
@@ -105,11 +106,15 @@ class Cypher():
             for index,row in df.iterrows():
                 record,summary,keys = driver.execute_query(
                 """
-                    MATCH(c:Country {name : $row.country})
-                    MATCH(a:Airport {name : $row.key})
-                    MERGE (c)-[r:VIA_AIRPORT]->(a)
-                        set r.val = $row.val
-
+                    match (c:Country {name:$row.country})
+                    match (a:Airport {name:$row.key})
+                    with c,a
+                    call apoc.do.when($row.val > 0,'merge (c)-[r:VIA_AIRPORT]->(a)  
+                    ON CREATE SET r.createDate = datetime()
+                    ON MATCH SET r.updateDate = datetime(),r.val = val 
+                    ','',{c:c, a:a, val:$row.val})
+                    YIELD value
+                    RETURN value
                 """, 
                 database_= neo.DB_Name,
                 row = {
@@ -160,4 +165,4 @@ class Cypher():
 
     
 if __name__=="__main__":
-    Cypher().createQuarter()
+    Cypher().createStaticDataSet()

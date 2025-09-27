@@ -4,3 +4,4 @@ graphdatascience
 dotenv
 openpyxl
 spacy
+langchain-neo4j
