@@ -5,17 +5,22 @@ from dotenv import load_dotenv
 from enum import Enum
 import json,os,spacy,math, pandas as pd
 from spacy.matcher import Matcher
+from huggingface_hub import InferenceClient,login
 
 class NeoDB:
     DB_Name:str
     def __init__(self):
         load_dotenv()
         self.DB_Name = os.getenv('NEO4J_DB')
+        self.url = os.getenv('NEO4J_URI')
+        self.username = os.getenv('NEO4J_USERNAME')
+        self.pwd = os.getenv('NEO4J_PASSWORD')
+
 
     def neoDriver(self) -> Driver:
         driver = GraphDatabase.driver(
-        os.getenv('NEO4J_URI'),
-        auth=(os.getenv('NEO4J_USERNAME'), os.getenv('NEO4J_PASSWORD')),
+        self.url,
+        auth=(self.username,self.pwd ),
         database=os.getenv('NEO4J_DB')
         )
         return driver
@@ -53,15 +58,17 @@ class Common():
                         'Australasia'
                         ]
         
-    def _is_convertible_to_number(self,s:any) -> bool:
+    @staticmethod
+    def _is_convertible_to_number(s:any) -> bool:
         try:
             float(s)  # Try converting to float (handles both integers and floats)
             return True
         except ValueError:
             return False
         
-    def calcPerc(self,val:any, perc:any) -> int|None:
-        if self._is_convertible_to_number(val) and self._is_convertible_to_number(perc):
+    @staticmethod
+    def calcPerc(val:any, perc:any) -> int|None:
+        if Common._is_convertible_to_number(val) and Common._is_convertible_to_number(perc):
             return math.ceil(float(val) * (float(perc) / 100))
         else:
             return None
@@ -126,6 +133,21 @@ class Common():
         else:
             return None
 
+class LLM:
+    def __init__(self):
+        load_dotenv()
+        self.token=os.getenv('HF_KEY')
+        self.hf_client = InferenceClient(self.token)
+        self.embedding_model_id = "sentence-transformers/all-MiniLM-L6-v2"    
+
+    def textEmbed(self,text:str):
+        return self.hf_client.feature_extraction(text=text, model=self.embedding_model_id)
+    def _login(self):
+        print(self.token)
+        return login(token=self.token)
+
+
+
 class HeaderMatcher():
     header_config:str
     header_matcher:Matcher
@@ -157,5 +179,6 @@ class HeaderMatcher():
         return header_val
 
     if __name__ == "__main__":
-        neoobj = NeoDB().neoDriver()
-        print(neoobj)
+        output = LLM().textEmbed('hello')
+        print(output)
+        print(len(output))

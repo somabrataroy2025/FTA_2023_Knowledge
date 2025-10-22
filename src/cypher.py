@@ -1,6 +1,7 @@
 from common import NeoDB
 from pandas import DataFrame
 from neo4j import RoutingControl
+from llm import embedding
 
 class Cypher():
     QRY_DB_Create = """
@@ -163,6 +164,30 @@ class Cypher():
                        'val' : row['Val']}
             )
 
-    
+    def addEmbedding(self):
+        neo = NeoDB()
+        driver = neo.neoDriver()
+        with driver:
+            with driver.session(database=neo.DB_Name) as session:                
+                record = session.run("""MATCH(a:Airport)
+                                RETURN a.name as name,a.desc as desc""",
+                                )
+                result = []
+                for val in record:                    
+                    if val["desc"] is not None:
+                        name = val["name"]
+                        embd_desc = embedding.embed_query(val["desc"])     
+                        result.append(
+                            {'name' : name, 'embed_desc': embd_desc}
+                        )  
+                tx = session.begin_transaction()                         
+                result = tx.run("""
+						UNWIND $result as rows
+                        MERGE (a:Airport {name:rows.name})
+                        on MATCH set a.embed_desc = rows.embed_desc""",
+                        result=result)
+                tx.commit()
+                print(result)
+        
 if __name__=="__main__":
-    Cypher().createStaticDataSet()
+    Cypher().addEmbedding()
