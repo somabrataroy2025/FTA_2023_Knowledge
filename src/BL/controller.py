@@ -1,7 +1,6 @@
 from typing import Any
-import BL.model as md
-from common import NeoDB
-
+import BL.model as md,json
+from common import NeoDB,AuraDB
 class actions:
     def fetch_agewise_stat(country:str,age_from:int,age_to:int)->list[md.AgeGroup_Stat]:
         try:
@@ -78,6 +77,44 @@ class actions:
              
         except ValueError as e:
             print(e)
+
+    def update_tracker(input:Any):
+        try:
+            param = input['param']
+            req_param = {}
+            for key,value in param:
+                req_param[key] = value
+            
+
+            neo = AuraDB()
+            driver = neo.AuraDriver()
+            with driver:
+                record,summary,keys = driver.execute_query("""
+                MERGE(f:FUNC {name : $row.method})
+                ON CREATE Set f.createdt = timestamp()
+                MERGE(u:USER {name : $row.user})
+                ON CREATE set u.createdt = timestamp()
+                CREATE (u)-[c:CALL_TO]->(f)
+                SET c.call_dt = $row.calldate,
+                c.latency = $row.latency,
+                c+=$param
+            """,
+                db_name = neo.DB,
+                row = {
+                    'method':input['method'],
+                    'user' : input['user'],
+                    'calldate' : input['calldate'],
+                    'latency' : input['latency']
+                },
+                param = req_param
+
+            )
+            print(record)
+            print(summary)
+            print(keys)
+        except Exception as e:
+            print(e)
+
 
 if __name__ == "__main__":
     data = actions.fetch_airport_stat('Canada','Delhi')

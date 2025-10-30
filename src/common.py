@@ -12,24 +12,51 @@ class NeoDB:
     def __init__(self):
         load_dotenv()
         self.DB_Name = os.getenv('NEO4J_DB')
+        self.DB_Name_Tracker = os.getenv('NEO4J_TRACKER_DB')
         self.url = os.getenv('NEO4J_URI')
         self.username = os.getenv('NEO4J_USERNAME')
         self.pwd = os.getenv('NEO4J_PASSWORD')
+        self.__item = '123'
 
 
     def neoDriver(self) -> Driver:
         driver = GraphDatabase.driver(
         self.url,
         auth=(self.username,self.pwd ),
-        database=os.getenv('NEO4J_DB')
+        database=self.DB_Name
         )
         return driver
+
+    def neoDriverTracker(self) -> Driver:
+        driver = GraphDatabase.driver(
+        self.url,
+        auth=(self.username,self.pwd ),
+        database=self.DB_Name_Tracker
+        )
+        return driver
+    
     
     def neoGDS(self)-> GraphDataScience:
         driver = self.neoDriver()
         gds = GraphDataScience.from_neo4j_driver(driver=driver)
-        gds.set_database(os.getenv('NEO4J_DB'))
+        gds.set_database(self.DB_Name)
         return gds
+
+class AuraDB:
+    def __init__(self) -> None:
+        load_dotenv()
+        self.DB = os.getenv('AURA_DB')
+        self.URL = os.getenv('AURA_URL')
+        self.USER = os.getenv('AURA_ID')
+        self.PWD = os.getenv('AURA_PWD')
+    
+    def AuraDriver(self)-> Driver:
+        AUTH = (self.USER, self.PWD)
+        driver =  GraphDatabase.driver(
+            self.URL, 
+            auth=AUTH,
+            database= self.DB) 
+        return driver
 
 class Sheet(Enum):
     FTA_Region = "FTA_Region"
